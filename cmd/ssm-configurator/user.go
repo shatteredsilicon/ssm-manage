@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/percona/pmm-manage/configurator/user"
+	"github.com/shatteredsilicon/ssm-manage/configurator/user"
 )
 
 func returnUser(w http.ResponseWriter, req *http.Request, username string) {

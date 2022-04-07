@@ -3,16 +3,17 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-logfmt/logfmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/go-logfmt/logfmt"
 )
 
 func getLogFileHandler(w http.ResponseWriter, req *http.Request) { // nolint: gocyclo
 	fileContent, err := ioutil.ReadFile(c.LogFilePath)
 	if err != nil {
-		returnError(w, req, http.StatusInternalServerError, "Cannot read pmm-manage log", err)
+		returnError(w, req, http.StatusInternalServerError, "Cannot read ssm-manage log", err)
 		return
 	}
 
@@ -42,7 +43,7 @@ func getLogFileHandler(w http.ResponseWriter, req *http.Request) { // nolint: go
 		}
 	}
 	if d.Err() != nil {
-		returnError(w, req, http.StatusInternalServerError, "Cannot parse pmm-manage log", d.Err())
+		returnError(w, req, http.StatusInternalServerError, "Cannot parse ssm-manage log", d.Err())
 		return
 	}
 

@@ -20,15 +20,15 @@ install:
 
 script:
   - git status
-  - go build -v ./cmd/pmm-configure
-  - go build -v ./cmd/pmm-configurator
-  - go test -coverpkg="github.com/percona/pmm-manage/..." -c -tags testrunmain ./cmd/pmm-configurator
+  - go build -v ./cmd/ssm-configure
+  - go build -v ./cmd/ssm-configurator
+  - go test -coverpkg="github.com/shatteredsilicon/ssm-manage/..." -c -tags testrunmain ./cmd/ssm-configurator
   - |
     sed -i "/ssh-key-path/assh-key-owner: $USER" tests/sandbox/config.yml
-  - PATH=$PATH:./tests/sandbox TEST_CONFIG=./tests/sandbox/config.yml ./pmm-configurator.test -test.run "^TestRunMain$" -test.coverprofile=coverage.txt >/dev/null 2>&1 &
+  - PATH=$PATH:./tests/sandbox TEST_CONFIG=./tests/sandbox/config.yml ./ssm-configurator.test -test.run "^TestRunMain$" -test.coverprofile=coverage.txt >/dev/null 2>&1 &
   - sleep 1
   - bats --tap tests/*.bats
-  - killall -SIGINT pmm-configurator.test
+  - killall -SIGINT ssm-configurator.test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -X fix

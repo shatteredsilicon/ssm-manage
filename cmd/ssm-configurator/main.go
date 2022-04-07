@@ -14,9 +14,9 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/percona/pmm-manage/configurator/config"
-	"github.com/percona/pmm-manage/configurator/sshkey"
-	"github.com/percona/pmm-manage/configurator/user"
+	"github.com/shatteredsilicon/ssm-manage/configurator/config"
+	"github.com/shatteredsilicon/ssm-manage/configurator/sshkey"
+	"github.com/shatteredsilicon/ssm-manage/configurator/user"
 )
 
 var c config.PMMConfig
@@ -55,7 +55,7 @@ func main() {
 
 	log.WithFields(log.Fields{
 		"address": c.ListenAddress,
-	}).Info("PMM Configurator is started")
+	}).Info("SSM Configurator is started")
 
 	hs := &http.Server{Addr: c.ListenAddress, Handler: router}
 	gracefulStop(hs)

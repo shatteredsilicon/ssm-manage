@@ -1,11 +1,11 @@
 [Unit]
-Description=PMM Configurator API
+Description=SSM Configurator API
 After=network.target
 
 [Service]
 Type=simple
-EnvironmentFile=-/etc/sysconfig/pmm-manage
-ExecStart=/usr/sbin/pmm-configurator $OPTIONS
+EnvironmentFile=-/etc/sysconfig/ssm-manage
+ExecStart=/usr/sbin/ssm-configurator $OPTIONS
 Restart=on-failure
 RestartSec=10s
 

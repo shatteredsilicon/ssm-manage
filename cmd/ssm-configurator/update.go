@@ -50,7 +50,7 @@ func isUpdateDisabled() bool {
 }
 
 func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
-	pidFile := path.Join(c.UpdateDirPath, "pmm-update.pid")
+	pidFile := path.Join(c.UpdateDirPath, "ssm-update.pid")
 	if _, err := os.Stat(pidFile); err == nil {
 		timestamp, pid, err := getCurrentUpdate()
 		if err != nil {
@@ -66,12 +66,12 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 
 	// check if update is disabled
 	if isUpdateDisabled() {
-		returnError(w, req, http.StatusNotFound, "Updating of PMM is disabled.", nil)
+		returnError(w, req, http.StatusNotFound, "Updating of SSM is disabled.", nil)
 		return
 	}
 
 	// check for update
-	if cmdOutput, err := exec.Command("pmm-update-check").CombinedOutput(); err != nil {
+	if cmdOutput, err := exec.Command("ssm-update-check").CombinedOutput(); err != nil {
 		from, to := parseOutput(string(cmdOutput))
 		releaseDateTo := fetchReleaseDate(to)
 		if len(releaseDateTo) > 0 {
@@ -84,7 +84,7 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 		json.NewEncoder(w).Encode(updateResponce{ // nolint: errcheck
 			Code:   http.StatusOK,
 			Status: http.StatusText(http.StatusOK),
-			Title:  "A new PMM version is available.",
+			Title:  "A new SSM version is available.",
 			From:   from,
 			To:     to,
 		})
@@ -92,11 +92,11 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// no update
-	returnError(w, req, http.StatusNotFound, "Your PMM version is up-to-date.", nil)
+	returnError(w, req, http.StatusNotFound, "Your SSM version is up-to-date.", nil)
 }
 
 func runCheckUpdateHandlerV2(w http.ResponseWriter, req *http.Request) {
-	pidFile := path.Join(c.UpdateDirPath, "pmm-update.pid")
+	pidFile := path.Join(c.UpdateDirPath, "ssm-update.pid")
 	if _, err := os.Stat(pidFile); err == nil {
 		timestamp, pid, err := getCurrentUpdate()
 		if err != nil {
@@ -111,7 +111,7 @@ func runCheckUpdateHandlerV2(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// check for update
-	if cmdOutput, err := exec.Command("pmm-update-check").CombinedOutput(); err != nil {
+	if cmdOutput, err := exec.Command("ssm-update-check").CombinedOutput(); err != nil {
 		_, to := parseOutput(string(cmdOutput))
 		json.NewEncoder(w).Encode(versionResponce{ // nolint: errcheck
 			Version:       to,
@@ -122,7 +122,7 @@ func runCheckUpdateHandlerV2(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// no update
-	returnError(w, req, http.StatusNotFound, "Your PMM version is up-to-date.", nil)
+	returnError(w, req, http.StatusNotFound, "Your SSM version is up-to-date.", nil)
 }
 
 func parseOutput(output string) (string, string) {
@@ -319,11 +319,11 @@ func getStepsInfo(fileContent []byte) string {
 func runUpdateHandler(w http.ResponseWriter, req *http.Request) {
 	// check if update is disabled
 	if isUpdateDisabled() {
-		returnError(w, req, http.StatusNotFound, "Updating of PMM is disabled.", nil)
+		returnError(w, req, http.StatusNotFound, "Updating of SSM is disabled.", nil)
 		return
 	}
 
-	if err := exec.Command("screen", "-d", "-m", "/usr/bin/pmm-update").Run(); err != nil { // nolint: gas
+	if err := exec.Command("screen", "-d", "-m", "/usr/bin/ssm-update").Run(); err != nil { // nolint: gas
 		returnError(w, req, http.StatusInternalServerError, "Cannot run update", err)
 		return
 	}
@@ -341,7 +341,7 @@ func runUpdateHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func getCurrentUpdate() (string, int, error) {
-	pidFile := path.Join(c.UpdateDirPath, "pmm-update.pid")
+	pidFile := path.Join(c.UpdateDirPath, "ssm-update.pid")
 	pid, err := ioutil.ReadFile(pidFile)
 	if err != nil {
 		return "", -1, err

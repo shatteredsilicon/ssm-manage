@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/fatih/structs"
-	"github.com/percona/pmm-manage/configurator/config"
+	"github.com/shatteredsilicon/ssm-manage/configurator/config"
 )
 
 // PMMConfig pass configuration via global variable :'(

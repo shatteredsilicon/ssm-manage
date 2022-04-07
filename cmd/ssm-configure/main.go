@@ -3,8 +3,8 @@ package main
 import (
 	log "github.com/sirupsen/logrus"
 
-	"github.com/percona/pmm-manage/configurator/config"
-	"github.com/percona/pmm-manage/configurator/user"
+	"github.com/shatteredsilicon/ssm-manage/configurator/config"
+	"github.com/shatteredsilicon/ssm-manage/configurator/user"
 )
 
 var c config.PMMConfig
@@ -30,8 +30,8 @@ func main() {
 	}
 
 	if errorCounter == 0 {
-		log.Info("PMM Server is configured correctly")
+		log.Info("SSM Server is configured correctly")
 	} else {
-		log.Fatal("PMM Server is not configured correctly")
+		log.Fatal("SSM Server is not configured correctly")
 	}
 }
