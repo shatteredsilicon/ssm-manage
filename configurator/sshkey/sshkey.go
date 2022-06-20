@@ -14,7 +14,7 @@ import (
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/sys/unix"
 
-	"github.com/percona/pmm-manage/configurator/config"
+	"github.com/shatteredsilicon/ssm-manage/configurator/config"
 )
 
 func Init(c config.PMMConfig) Handler {

@@ -60,5 +60,5 @@ func replacePrometheusUser(newUser PMMUser) error {
 }
 
 func resetPrometheusUser() error {
-	return replacePrometheusUser(PMMUser{Username: "pmm", Password: "pmm"})
+	return replacePrometheusUser(PMMUser{Username: "ssm", Password: "ssm"})
 }

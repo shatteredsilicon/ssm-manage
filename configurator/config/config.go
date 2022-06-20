@@ -23,7 +23,7 @@ type PMMConfig struct {
 	GrafanaDBPath        string              `yaml:"grafana-db-path"        default:"/srv/grafana/grafana.db" desc:"grafana database location"`
 	PrometheusConfPath   string              `yaml:"prometheus-conf-path"   default:"/etc/prometheus.yml"     desc:"prometheus configuration file location"`
 	UpdateDirPath        string              `yaml:"update-dir-path"        default:"/srv/update"             desc:"update directory location"`
-	LogFilePath          string              `yaml:"log-file"               default:"/var/log/pmm-manage.log" desc:"log file location"`
+	LogFilePath          string              `yaml:"log-file"               default:"/var/log/ssm-manage.log" desc:"log file location"`
 	SkipPrometheusReload string              `yaml:"skip-prometheus-reload" default:"false"                   desc:"log file location"`
 	Configuration        map[string]string   `yaml:"configuration"          default:""                        desc:""`
 	Users                []map[string]string `yaml:"users"                  default:""                        desc:""`
@@ -81,7 +81,7 @@ func (c *PMMConfig) parseConfig() {
 		if len(configVar) > 0 {
 			c.ConfigPath = configVar
 		} else {
-			c.ConfigPath = "/srv/update/pmm-manage.yml"
+			c.ConfigPath = "/srv/update/ssm-manage.yml"
 		}
 	}
 

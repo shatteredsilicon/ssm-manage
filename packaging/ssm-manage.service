@@ -1,0 +1,13 @@
+[Unit]
+Description=SSM Configurator API
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/ssm-manage
+ExecStart=/usr/sbin/ssm-configurator $OPTIONS
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
