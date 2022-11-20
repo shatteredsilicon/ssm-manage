@@ -20,7 +20,7 @@ var replaceNeeded = map[string]bool{
 
 // TODO: should be fully reworked, implemented as very quick workaround for v1.1.0
 func replacePrometheusUser(newUser PMMUser) error {
-	input, err := ioutil.ReadFile(PMMConfig.PrometheusConfPath)
+	input, err := ioutil.ReadFile(SSMConfig.PrometheusConfPath)
 	if err != nil {
 		return err
 	}
@@ -40,11 +40,11 @@ func replacePrometheusUser(newUser PMMUser) error {
 	}
 	output := strings.Join(lines, "\n")
 
-	if err = ioutil.WriteFile(PMMConfig.PrometheusConfPath, []byte(output), 0644); err != nil {
+	if err = ioutil.WriteFile(SSMConfig.PrometheusConfPath, []byte(output), 0644); err != nil {
 		return err
 	}
 
-	if PMMConfig.SkipPrometheusReload != "true" {
+	if SSMConfig.SkipPrometheusReload != "true" {
 		req, err := http.NewRequest("POST", "http://127.0.0.1:9090/prometheus/-/reload", nil)
 		if err != nil {
 			return err

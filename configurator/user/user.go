@@ -8,8 +8,8 @@ import (
 	"github.com/shatteredsilicon/ssm-manage/configurator/config"
 )
 
-// PMMConfig pass configuration via global variable :'(
-var PMMConfig config.PMMConfig
+// SSMConfig pass configuration via global variable :'(
+var SSMConfig config.SSMConfig
 
 // CreateUser in .htpasswd file, Prometheus config and Grafana database
 func CreateUser(newUser PMMUser) (string, error) { // nolint: gocyclo
@@ -42,7 +42,7 @@ func CreateUser(newUser PMMUser) (string, error) { // nolint: gocyclo
 		return "Cannot set HTTP password", err
 	}
 
-	if err := PMMConfig.AddUser(structs.Map(newUser)); err != nil {
+	if err := SSMConfig.AddUser(structs.Map(newUser)); err != nil {
 		return "Cannot save configuration file", err
 	}
 
@@ -63,7 +63,7 @@ func DeleteUser(username string) (string, error) {
 		return "Cannot remove HTTP user", err
 	}
 
-	if err := PMMConfig.DeleteUser(username); err != nil {
+	if err := SSMConfig.DeleteUser(username); err != nil {
 		return "Cannot save configuration file", err
 	}
 

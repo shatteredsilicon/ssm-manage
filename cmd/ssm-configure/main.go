@@ -7,11 +7,11 @@ import (
 	"github.com/shatteredsilicon/ssm-manage/configurator/user"
 )
 
-var c config.PMMConfig
+var c config.SSMConfig
 
 func main() {
 	c = config.ParseConfig()
-	user.PMMConfig = c
+	user.SSMConfig = c
 	errorCounter := 0
 
 	for _, userMap := range c.Users {

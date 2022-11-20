@@ -23,7 +23,6 @@ type updateResponce struct {
 }
 
 type versionResponce struct {
-	Version       string `json:"version"`
-	ReleaseDate   string `json:"release_date,omitempty"`
-	DisableUpdate bool   `json:"disable_update,omitempty"`
+	Version     string `json:"version"`
+	ReleaseDate string `json:"release_date,omitempty"`
 }

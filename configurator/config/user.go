@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func (c *PMMConfig) AddUser(newUser map[string]interface{}) error {
+func (c *SSMConfig) AddUser(newUser map[string]interface{}) error {
 	user := make(map[string]string)
 	for key, value := range newUser {
 		key = strings.ToLower(key)
@@ -19,7 +19,7 @@ func (c *PMMConfig) AddUser(newUser map[string]interface{}) error {
 	return c.Save()
 }
 
-func (c *PMMConfig) DeleteUser(username string) error {
+func (c *SSMConfig) DeleteUser(username string) error {
 	var fixedUsers []map[string]string
 
 	for _, userMap := range c.Users {

@@ -12,8 +12,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// PMMConfig implements struct with all configuration params in one place
-type PMMConfig struct {
+// SSMConfig implements struct with all configuration params in one place
+type SSMConfig struct {
 	ConfigPath           string              `yaml:"config"                 default:""                        desc:"configuration file location"`
 	HtpasswdPath         string              `yaml:"htpasswd-path"          default:"/srv/nginx/.htpasswd"    desc:"htpasswd file location"`
 	ListenAddress        string              `yaml:"listen-address"         default:"127.0.0.1:7777"          desc:"Address and port to listen on: [ip_address]:port"`
@@ -27,10 +27,12 @@ type PMMConfig struct {
 	SkipPrometheusReload string              `yaml:"skip-prometheus-reload" default:"false"                   desc:"log file location"`
 	Configuration        map[string]string   `yaml:"configuration"          default:""                        desc:""`
 	Users                []map[string]string `yaml:"users"                  default:""                        desc:""`
+
+	DockerHubRepoAPIPrefix string `yaml:"docker-hub-api-prefix" default:"https://hub.docker.com/v2/namespaces/shatteredsilicon/repositories/ssm-server"  desc:"URL of Docker hub api (v2) 'List repository tags'"`
 }
 
 // ParseConfig implements function which read command line arguments, configuration file and set default values
-func ParseConfig() (c PMMConfig) {
+func ParseConfig() (c SSMConfig) {
 	t := reflect.TypeOf(&c).Elem()
 	v := reflect.ValueOf(&c).Elem()
 	// iterate over all confConfig fields
@@ -58,7 +60,7 @@ func ParseConfig() (c PMMConfig) {
 	return c
 }
 
-func (c *PMMConfig) setDefaultValues() {
+func (c *SSMConfig) setDefaultValues() {
 	t := reflect.TypeOf(c).Elem()
 	v := reflect.ValueOf(c).Elem()
 	// iterate over all confConfig fields
@@ -74,7 +76,7 @@ func (c *PMMConfig) setDefaultValues() {
 	}
 }
 
-func (c *PMMConfig) parseConfig() {
+func (c *SSMConfig) parseConfig() {
 	// parseConfig() runs before setDefaultValues(), so it is needed to set default manually
 	if c.ConfigPath == "" {
 		configVar := os.Getenv("TEST_CONFIG")
@@ -109,7 +111,7 @@ func (c *PMMConfig) parseConfig() {
 }
 
 // Save dump configuration values to configuration file
-func (c *PMMConfig) Save() error {
+func (c *SSMConfig) Save() error {
 	bytes, err := yaml.Marshal(c)
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -128,7 +130,7 @@ func (c *PMMConfig) Save() error {
 	return nil
 }
 
-func (c *PMMConfig) setLogger() {
+func (c *SSMConfig) setLogger() {
 	log.SetFormatter(&log.TextFormatter{DisableColors: true})
 	if logFile, err := os.OpenFile(c.LogFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644); err != nil { // nolint: gas
 		log.WithFields(log.Fields{
@@ -140,7 +142,7 @@ func (c *PMMConfig) setLogger() {
 	}
 }
 
-func (c *PMMConfig) validateValues() {
+func (c *SSMConfig) validateValues() {
 	if len(c.PathPrefix) > 0 && !strings.HasPrefix(c.PathPrefix, "/") {
 		c.PathPrefix = "/" + c.PathPrefix
 		log.Warning("Prefix has been changed to " + c.PathPrefix)
