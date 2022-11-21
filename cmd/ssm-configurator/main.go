@@ -19,12 +19,12 @@ import (
 	"github.com/shatteredsilicon/ssm-manage/configurator/user"
 )
 
-var c config.PMMConfig
+var c config.SSMConfig
 var SSHKey sshkey.Handler
 
 func main() {
 	c = config.ParseConfig()
-	user.PMMConfig = c
+	user.SSMConfig = c
 	SSHKey = sshkey.Init(c)
 	SSHKey.RunSSHKeyChecks()
 
@@ -37,13 +37,6 @@ func main() {
 	router.HandleFunc("/v1/check-instance", checkInstanceHandler).Methods("POST")
 	router.HandleFunc("/v1/check-update", runCheckUpdateHandler).Methods("GET")
 	router.HandleFunc("/v1/version", getCurrentVersionHandler).Methods("GET")
-	router.HandleFunc("/v1/updates", getUpdateListHandler).Methods("GET")
-	router.HandleFunc("/v1/updates", runUpdateHandler).Methods("POST")
-	router.HandleFunc("/v1/updates/{timestamp}", getUpdateHandler).Methods("GET")
-	router.HandleFunc("/v1/updates/{timestamp}", deleteUpdateHandler).Methods("DELETE")
-
-	router.HandleFunc("/v2/version", getCurrentVersionHandlerV2).Methods("GET")
-	router.HandleFunc("/v2/check-update", runCheckUpdateHandlerV2).Methods("GET")
 
 	router.HandleFunc("/v1/users", getUserListHandler).Methods("GET")
 	router.HandleFunc("/v1/users", createUserHandler).Methods("POST")

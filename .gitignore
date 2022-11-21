@@ -2,3 +2,4 @@
 /ssm-configure
 *~
 *.log
+vendor/

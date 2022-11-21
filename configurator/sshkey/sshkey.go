@@ -17,7 +17,7 @@ import (
 	"github.com/shatteredsilicon/ssm-manage/configurator/config"
 )
 
-func Init(c config.PMMConfig) Handler {
+func Init(c config.SSMConfig) Handler {
 	return Handler{
 		KeyPath:  c.SSHKeyPath,
 		KeyOwner: c.SSHKeyOwner,

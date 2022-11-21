@@ -2,6 +2,7 @@ package user
 
 import (
 	"database/sql"
+
 	"github.com/grafana/grafana/pkg/util"
 	_ "github.com/mattn/go-sqlite3" // sqlite driver requires such import
 )
@@ -12,7 +13,7 @@ func createGrafanaUser(newUser PMMUser) error {
 	rands := util.GetRandomString(10)
 	password := util.EncodePassword(newUser.Password, salt)
 
-	db, err := sql.Open("sqlite3", PMMConfig.GrafanaDBPath)
+	db, err := sql.Open("sqlite3", SSMConfig.GrafanaDBPath)
 	if err != nil {
 		return err
 	}
@@ -91,7 +92,7 @@ func addUserToOrg(db *sql.DB, userID int64) error {
 }
 
 func deleteGrafanaUser(username string) error {
-	db, err := sql.Open("sqlite3", PMMConfig.GrafanaDBPath)
+	db, err := sql.Open("sqlite3", SSMConfig.GrafanaDBPath)
 	if err != nil {
 		return err
 	}
