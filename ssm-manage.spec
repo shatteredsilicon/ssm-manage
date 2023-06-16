@@ -10,7 +10,7 @@
 
 Name:		%{repo}
 Version:	%{_version}
-Release:	1%{?dist}
+Release:	%{_release}
 Summary:	SSM configuration managament tool
 
 License:	AGPLv3
