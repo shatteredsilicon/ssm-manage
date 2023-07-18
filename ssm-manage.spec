@@ -39,8 +39,8 @@ ln -s $(pwd) src/%{provider_prefix}
 
 %build
 export GOPATH=$(pwd)
-GO111MODULE=off go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -a -v -x %{provider_prefix}/cmd/ssm-configure
-GO111MODULE=off go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -a -v -x %{provider_prefix}/cmd/ssm-configurator
+GO111MODULE=off go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X 'github.com/shatteredsilicon/ssm-manage/configurator/config.Version=%{version}-%{release}'" -a -v -x %{provider_prefix}/cmd/ssm-configure
+GO111MODULE=off go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X 'github.com/shatteredsilicon/ssm-manage/configurator/config.Version=%{version}-%{release}'" -a -v -x %{provider_prefix}/cmd/ssm-configurator
 
 
 %install

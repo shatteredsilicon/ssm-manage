@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/shatteredsilicon/ssm-manage/configurator/config"
 )
 
 const (
@@ -125,6 +127,11 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 func getCurrentVersionHandler(w http.ResponseWriter, req *http.Request) {
 	versionResp := versionResponce{
 		Version: os.Getenv("SSM_VERSION"),
+	}
+
+	// variable number not exists, use package-level version number
+	if strings.TrimSpace(versionResp.Version) == "" {
+		versionResp.Version = config.Version
 	}
 
 	if versionResp.Version == "" {

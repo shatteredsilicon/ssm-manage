@@ -12,6 +12,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var (
+	// use `-ldflags -X github.com/shatteredsilicon/ssm-manage/configurator/config.Version=`
+	// to set version number at build time
+	Version = "X"
+)
+
 // SSMConfig implements struct with all configuration params in one place
 type SSMConfig struct {
 	ConfigPath           string              `yaml:"config"                 default:""                        desc:"configuration file location"`
