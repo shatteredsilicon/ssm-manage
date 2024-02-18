@@ -15,7 +15,7 @@ Summary:	SSM configuration managament tool
 
 License:	AGPLv3
 URL:		https://%{provider_prefix}
-Source0:	%{name}-%{version}.tar.gz
+Source0:	%{name}-%{version}-%{release}.tar.gz
 
 BuildRequires:	golang
 
