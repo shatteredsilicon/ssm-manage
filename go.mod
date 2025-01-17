@@ -1,6 +1,8 @@
 module github.com/shatteredsilicon/ssm-manage
 
-go 1.20
+go 1.22.0
+
+toolchain go1.22.9
 
 require (
 	github.com/fatih/structs v1.0.0
@@ -11,6 +13,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.9.0
 	github.com/sirupsen/logrus v1.0.5
 	golang.org/x/crypto v0.0.0-20180614221331-a8fb68e7206f
+	golang.org/x/mod v0.22.0
 	golang.org/x/sys v0.6.0
 	gopkg.in/yaml.v2 v2.2.1
 )
