@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/shatteredsilicon/ssm-manage/configurator/config"
+	"golang.org/x/mod/semver"
 )
 
 const (
@@ -42,10 +43,10 @@ type dockerHubTags struct {
 	Results  []dockerHubTag `json:"results"`
 }
 
-var versionRegexp = regexp.MustCompile(`^v?\d+\.\d+\.\d+\.\d+\.\d+\.\d+$`)
+var versionRegexp = regexp.MustCompile(`^v?\d+\.\d+\.\d+(-\d+)?$`)
 
 func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
-	var version, releaseDate string
+	var version, oriVersion, releaseDate string
 
 	client := http.Client{}
 	timer := time.NewTimer(5 * time.Minute)
@@ -61,10 +62,12 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 	list := dockerHubTags{
 		Next: &apiURL,
 	}
+
+LOOP:
 	for list.Next != nil && *list.Next != "" {
 		select {
 		case <-timer.C:
-			break
+			break LOOP
 		default:
 		}
 
@@ -95,9 +98,13 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 				continue
 			}
 
-			versionBytes := versionRegexp.Find([]byte(result.Name))
-			if versionBytes == nil || len(versionBytes) == 0 {
+			oriVersionStr := string(versionRegexp.Find([]byte(result.Name)))
+			if len(oriVersionStr) == 0 {
 				continue
+			}
+			versionStr := oriVersionStr
+			if versionStr[0] != 'v' {
+				versionStr = "v" + versionStr
 			}
 
 			for _, image := range result.Images {
@@ -107,9 +114,9 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 					continue
 				}
 
-				if strings.TrimLeft(string(versionBytes), "v") > strings.TrimLeft(version, "v") &&
-					strings.TrimLeft(string(versionBytes), "v") > strings.TrimLeft(os.Getenv("SSM_VERSION"), "v") {
-					version = string(versionBytes)
+				if version == "" || semver.Compare(versionStr, version) > 0 {
+					version = versionStr
+					oriVersion = oriVersionStr
 					releaseDate = image.LastPushed
 				}
 
@@ -118,9 +125,21 @@ func runCheckUpdateHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	ssmVersion := os.Getenv("SSM_VERSION")
+	if ssmVersion[0] != 'v' {
+		ssmVersion = "v" + ssmVersion
+	}
+
+	// compare vMajor.Minor.Patch only
+	ssmVersion = ssmVersion[0 : len(ssmVersion)-len(semver.Build(ssmVersion))]
+	ssmVersion = ssmVersion[0 : len(ssmVersion)-len(semver.Prerelease(ssmVersion))]
+	version = version[0 : len(version)-len(semver.Build(version))]
+	version = version[0 : len(version)-len(semver.Prerelease(version))]
+
 	json.NewEncoder(w).Encode(versionResponce{
-		Version:     version,
-		ReleaseDate: releaseDate,
+		Version:      oriVersion,
+		ReleaseDate:  releaseDate,
+		UpdateNeeded: semver.Compare(version, ssmVersion) > 0,
 	})
 }
 
@@ -132,37 +151,6 @@ func getCurrentVersionHandler(w http.ResponseWriter, req *http.Request) {
 	// variable number not exists, use package-level version number
 	if strings.TrimSpace(versionResp.Version) == "" {
 		versionResp.Version = config.Version
-	}
-
-	if versionResp.Version == "" {
-		json.NewEncoder(w).Encode(versionResp)
-		return
-	}
-
-	u, err := url.Parse(c.DockerHubRepoAPIPrefix)
-	if err != nil {
-		returnError(w, req, http.StatusInternalServerError, "Fetching ssm-server version from docker hub failed", err)
-		return
-	}
-	u.Path = path.Join(u.Path, "tags", os.Getenv("SSM_VERSION"))
-
-	client := http.Client{}
-	resp, err := client.Get(u.String())
-	if err != nil {
-		returnError(w, req, http.StatusInternalServerError, "Fetching ssm-server version from docker hub failed", err)
-		return
-	}
-
-	var tag dockerHubTag
-	err = json.NewDecoder(resp.Body).Decode(&tag)
-	defer resp.Body.Close()
-	if err != nil {
-		returnError(w, req, http.StatusInternalServerError, "Fetching ssm-server version from docker hub failed", err)
-		return
-	}
-
-	if tag.TagStatus == statusDockerHubAPIActive {
-		versionResp.ReleaseDate = tag.TagLastPushed
 	}
 
 	json.NewEncoder(w).Encode(versionResp)

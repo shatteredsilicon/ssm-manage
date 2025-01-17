@@ -23,6 +23,7 @@ type updateResponce struct {
 }
 
 type versionResponce struct {
-	Version     string `json:"version"`
-	ReleaseDate string `json:"release_date,omitempty"`
+	Version      string `json:"version"`
+	ReleaseDate  string `json:"release_date,omitempty"`
+	UpdateNeeded bool   `json:"update_needed"`
 }
