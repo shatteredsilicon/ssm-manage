@@ -1,3 +1,0 @@
-#!/bin/bash
-
-diff $(dirname $0)/new.yml $(dirname $0)/main.yml
