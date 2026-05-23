@@ -9,17 +9,13 @@ require (
 	github.com/gorilla/mux v1.6.2
 	github.com/mattn/go-sqlite3 v1.9.0
 	github.com/sirupsen/logrus v1.9.4
-	golang.org/x/crypto v0.49.0
+	golang.org/x/crypto v0.52.0
 	golang.org/x/mod v0.22.0
-	golang.org/x/sys v0.42.0
+	golang.org/x/sys v0.45.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
-	golang.org/x/term v0.41.0 // indirect
-	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
-	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 )
