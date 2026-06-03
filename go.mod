@@ -1,6 +1,6 @@
 module github.com/shatteredsilicon/ssm-manage
 
-go 1.25.10
+go 1.25.11
 
 require (
 	github.com/fatih/structs v1.0.0
