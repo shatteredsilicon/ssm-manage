@@ -33,14 +33,11 @@ See the SSM docs for more information.
 
 %prep
 %setup -q -n %{repo}
-mkdir -p src/%{provider}.%{provider_tld}/%{project}
-ln -s $(pwd) src/%{provider_prefix}
 
 
 %build
-export GOPATH=$(pwd)
-GO111MODULE=off go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X 'github.com/shatteredsilicon/ssm-manage/configurator/config.Version=%{version}-%{_release}'" -a -v -x %{provider_prefix}/cmd/ssm-configure
-GO111MODULE=off go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X 'github.com/shatteredsilicon/ssm-manage/configurator/config.Version=%{version}-%{_release}'" -a -v -x %{provider_prefix}/cmd/ssm-configurator
+GOTOOLCHAIN=local go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X 'github.com/shatteredsilicon/ssm-manage/configurator/config.Version=%{version}-%{_release}'" -a -v -x ./cmd/ssm-configure
+GOTOOLCHAIN=local go build -ldflags "${LDFLAGS:-} -s -w -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X 'github.com/shatteredsilicon/ssm-manage/configurator/config.Version=%{version}-%{_release}'" -a -v -x ./cmd/ssm-configurator
 
 
 %install
