@@ -61,8 +61,8 @@ install -p -m 0644 packaging/ssm-manage.service %{buildroot}/usr/lib/systemd/sys
 
 
 %files
-%license src/%{provider_prefix}/LICENSE
-%doc src/%{provider_prefix}/README.md
+%license LICENSE
+%doc README.md
 %{_bindir}/ssm-configure
 %{_sbindir}/ssm-configurator
 /usr/lib/systemd/system/%{name}.service
