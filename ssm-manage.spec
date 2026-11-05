@@ -17,7 +17,7 @@ License:	AGPLv3
 URL:		https://%{provider_prefix}
 Source0:	%{name}-%{version}-%{_release}.tar.gz
 
-BuildRequires:	golang
+BuildRequires:	golang >= 1.27.3
 
 %if 0%{?fedora} || 0%{?rhel} == 7
 BuildRequires: systemd
